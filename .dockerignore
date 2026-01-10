@@ -2,6 +2,3 @@
 .gitignore
 .idea
 node_modules
-target/original-*
-*.log
-.env
