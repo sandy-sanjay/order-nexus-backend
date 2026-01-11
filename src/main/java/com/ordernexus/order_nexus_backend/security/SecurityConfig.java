@@ -35,31 +35,17 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
                 .authorizeHttpRequests(auth -> auth
-                        // public endpoints
-                        .requestMatchers(
-                                "/api/auth/**",
-                                "/manifest.json",
-                                "/favicon.ico",
-                                "/",
-                                "/index.html",
-                                "/static/**",
-                                "/assets/**"
-                        ).permitAll()
-
-                        // allow preflight
+                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
-                        // everything else secured
                         .anyRequest().authenticated()
                 )
-
-                // JWT filter
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -77,12 +63,10 @@ public class SecurityConfig {
 
         config.setAllowedOrigins(List.of(
                 "http://localhost:3000",
-                "https://order-nexus-2fy2.vercel.app",
-                "https://order-nexus-2fy2-frh0mkjqd-sanjays-projects-aafb27f8.vercel.app",
-                "https://order-nexus-2fy2-g6gbnneat-sanjays-projects-aafb27f8.vercel.app"
+                "https://order-nexus-2fy2.vercel.app"
         ));
 
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 
