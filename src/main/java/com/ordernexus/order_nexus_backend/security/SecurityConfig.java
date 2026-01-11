@@ -35,23 +35,31 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
                 .authorizeHttpRequests(auth -> auth
+                        // public endpoints
                         .requestMatchers(
                                 "/api/auth/**",
                                 "/manifest.json",
                                 "/favicon.ico",
                                 "/",
-                                "/index.html"
+                                "/index.html",
+                                "/static/**",
+                                "/assets/**"
                         ).permitAll()
+
+                        // allow preflight
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                        // everything else secured
                         .anyRequest().authenticated()
                 )
+
+                // JWT filter
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -74,7 +82,7 @@ public class SecurityConfig {
                 "https://order-nexus-2fy2-g6gbnneat-sanjays-projects-aafb27f8.vercel.app"
         ));
 
-        config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 
