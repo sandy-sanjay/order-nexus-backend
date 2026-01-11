@@ -41,7 +41,8 @@ public class SecurityConfig {
                                 "/favicon.ico",
                                 "/",
                                 "/index.html",
-                                "/static/**"
+                                "/static/**",
+                                "/assets/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -49,6 +50,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
