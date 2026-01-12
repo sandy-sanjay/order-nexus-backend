@@ -1,0 +1,12 @@
+﻿# Java / build artifacts
+/target/
+/build/
+*.class
+*.jar
+*.war
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
