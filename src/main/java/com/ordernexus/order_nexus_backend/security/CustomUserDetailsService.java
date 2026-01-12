@@ -15,17 +15,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        // TEMP: hardcoded admin
-        if (username.equals("admin")) {
-            return User.builder()
-                    .username("admin")
-                    .password("admin123")
-                    .roles("ADMIN")
-                    .build();
-        }
+        AuthUser user = authRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        throw new UsernameNotFoundException("User not found");
+        return User.builder()
+                .username(user.getUsername())
+                .password(user.getPassword())   // ✅ BCrypt password from DB
+                .roles(user.getRole())
+                .build();
     }
 }
